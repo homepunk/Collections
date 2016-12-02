@@ -1,19 +1,26 @@
-import java.util.ArrayList;
+package realisation;
+
+import collection_impl.MyArrayList;
+import collection_impl.MyLinkedList;
+import collection.IList;
+import Iterator.Iterator;
 
 public class Realisation {
 
-    static void output(InterfaceList list) {
-        if(list.getClass() == MyArrayList.class){
+    static void output(IList list) {
+        if (list.getClass() == MyArrayList.class) {
             System.out.print("Array list: ");
         } else System.out.print("Linked list: ");
 
-        for (int i = 0; i < list.size(); i++) {
-            System.out.print(list.get(i) + " ");
+        Iterator<Integer> it = list.iterator();
+        if (list.size() == 0) System.out.println("Empty");
+        while (it.hasNext()) {
+            System.out.print(it.next() + " ");
         }
         System.out.println();
     }
 
-    static void contain(InterfaceList list, Integer i) {
+    static void contain(IList list, Integer i) {
         if (list.contain(i)) {
             System.out.println("list contains " + i);
         } else {
@@ -25,6 +32,7 @@ public class Realisation {
 
         MyArrayList<Integer> list = new MyArrayList<Integer>();
         MyLinkedList<Integer> linkedList = new MyLinkedList<Integer>();
+        Iterator<Integer> it = linkedList.iterator();
 
         for (int i = 0; i < 10; i++) {
             list.add(i);
@@ -32,6 +40,7 @@ public class Realisation {
         }
 
         output(list);
+        output(linkedList);
 
         list.remove(1);
         list.remove(7);
@@ -62,6 +71,10 @@ public class Realisation {
         linkedList.addFirst(5);
         System.out.println("The size of Doubly Linked List is " + linkedList.size());
         linkedList.getIndexes();
+        while (it.hasNext()) {
+            it.remove();
+        }
+        output(linkedList);
     }
 
 }

@@ -1,8 +1,14 @@
-class MyArrayList<T> implements InterfaceList<T> {
+package collection_impl;
+
+import collection.IList;
+import Iterator.Iterable;
+import Iterator.Iterator;
+
+public class MyArrayList<T> implements IList<T>, Iterable<T> {
     private Object[] objects;
     private int size = 0;
 
-    MyArrayList() {
+    public MyArrayList() {
         objects = new Object[1];
     }
 
@@ -47,24 +53,30 @@ class MyArrayList<T> implements InterfaceList<T> {
     }
 
     @Override
+    public Iterator<T> iterator() {
+        return new Itr();
+    }
+
+    @Override
     public void remove(int index) throws IndexOutOfBoundsException {
-            size = size() - 1;
-            Object[] temp = new Object[size];
-            if (index != 0) {
-                for (int i = 0, j = 0; i < size(); i++, j++) {
-                    if (i != index - 1) {
-                        temp[i] = objects[j];
-                    } else {
-                        temp[i] = objects[j++];
-                    }
-                }
-            } else {
-                for (int i = 0, j = 1; i < size; i++, j++) {
+        size = size() - 1;
+        Object[] temp = new Object[size];
+        if (index != 0) {
+            for (int i = 0, j = 0; i < size(); i++, j++) {
+                if (i != index - 1) {
                     temp[i] = objects[j];
+                } else {
+                    temp[i] = objects[j++];
                 }
             }
-            objects = temp;
+        } else {
+            for (int i = 0, j = 1; i < size; i++, j++) {
+                temp[i] = objects[j];
+            }
         }
+        objects = temp;
+    }
+
 
     void resize() {
         Object[] temp = new Object[objects.length + 1];
@@ -75,5 +87,23 @@ class MyArrayList<T> implements InterfaceList<T> {
         objects = temp;
     }
 
+    private class Itr implements Iterator{
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size && objects[currentIndex] != null;
+        }
+
+        @Override
+        public Object next() {
+            return objects[currentIndex++];
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
 
 }

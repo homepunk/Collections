@@ -1,9 +1,16 @@
-public class MyLinkedList<T> implements InterfaceList<T> {
+package collection_impl;
+
+import collection.IList;
+import Iterator.Iterable;
+import Iterator.Iterator;
+
+import java.util.NoSuchElementException;
+
+public class MyLinkedList<T> implements IList<T>, Iterable<T> {
     private Node first; //first
     private Node last; //last
     private int size = 0; // position
     private int index;
-
 
     @Override
     public void add(T T) {
@@ -81,6 +88,11 @@ public class MyLinkedList<T> implements InterfaceList<T> {
         return size == 0;
     }
 
+    @Override
+    public Iterator iterator() {
+        return new ListIterator();
+    }
+
     public void addFirst(T T) {
         System.out.println("Adding node " + T + " at the start");
         Node node = new Node(T);
@@ -152,21 +164,32 @@ public class MyLinkedList<T> implements InterfaceList<T> {
         }
     }
 
-    private class ListIterator implements InterfaceIterator{
+    private class ListIterator implements Iterator {
+        Node<T> current = first;
+        Node<T> lastReturned;
+        private int currentIndex = 0;
 
         @Override
         public boolean hasNext() {
-            return false;
+            return currentIndex < size;
         }
 
         @Override
-        public Object next() {
-            return null;
+        public T next() {
+            if(!hasNext())
+                throw new NoSuchElementException();
+            lastReturned = current;
+            current = current.next;
+            currentIndex++;
+            return lastReturned.element;
         }
 
         @Override
         public void remove() {
-
+            if(!hasNext())
+                throw new IllegalStateException();
+            current = null;
+            size--;
         }
     }
 }
